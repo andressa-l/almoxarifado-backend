@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmoxarifadoAPI", "AlmoxarifadoAPI\AlmoxarifadoAPI.csproj", "{1A7D2C83-FAC6-40D1-9D28-AD8648DBADED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-Application", "01-Application", "{5248B712-A8F0-4E48-A7B5-4F8650D1EDB8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02-Services", "02-Services", "{A7C8B34A-40EA-4262-AFAB-BA824C4E05A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03-Domain", "03-Domain", "{984F78E8-463E-4D78-803A-4C1EE20B37BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04-Infrastructure", "04-Infrastructure", "{EE280E76-C2CC-415F-A765-F748B44FB4EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmoxarifadoInfrastructure", "AlmoxarifadoInfrastructure\AlmoxarifadoInfrastructure.csproj", "{FA32B68C-DB8B-4178-B2EF-33E8959D84C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmoxarifadoDomain", "AlmoxarifadoDomain\AlmoxarifadoDomain.csproj", "{F78F1ECF-8878-4BC0-9587-6E1F8F836446}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlmoxarifadoServices", "AlmoxarifadoServices\AlmoxarifadoServices.csproj", "{EFA655E2-D775-48E4-99BD-54AEB62FDFD1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A7D2C83-FAC6-40D1-9D28-AD8648DBADED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A7D2C83-FAC6-40D1-9D28-AD8648DBADED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A7D2C83-FAC6-40D1-9D28-AD8648DBADED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A7D2C83-FAC6-40D1-9D28-AD8648DBADED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA32B68C-DB8B-4178-B2EF-33E8959D84C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA32B68C-DB8B-4178-B2EF-33E8959D84C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA32B68C-DB8B-4178-B2EF-33E8959D84C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA32B68C-DB8B-4178-B2EF-33E8959D84C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F78F1ECF-8878-4BC0-9587-6E1F8F836446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F78F1ECF-8878-4BC0-9587-6E1F8F836446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F78F1ECF-8878-4BC0-9587-6E1F8F836446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F78F1ECF-8878-4BC0-9587-6E1F8F836446}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA655E2-D775-48E4-99BD-54AEB62FDFD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA655E2-D775-48E4-99BD-54AEB62FDFD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA655E2-D775-48E4-99BD-54AEB62FDFD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA655E2-D775-48E4-99BD-54AEB62FDFD1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1A7D2C83-FAC6-40D1-9D28-AD8648DBADED} = {5248B712-A8F0-4E48-A7B5-4F8650D1EDB8}
+		{FA32B68C-DB8B-4178-B2EF-33E8959D84C8} = {EE280E76-C2CC-415F-A765-F748B44FB4EA}
+		{F78F1ECF-8878-4BC0-9587-6E1F8F836446} = {984F78E8-463E-4D78-803A-4C1EE20B37BC}
+		{EFA655E2-D775-48E4-99BD-54AEB62FDFD1} = {A7C8B34A-40EA-4262-AFAB-BA824C4E05A5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0229FF8E-A70C-4C8E-9986-BEE7D1B5B56C}
+	EndGlobalSection
+EndGlobal

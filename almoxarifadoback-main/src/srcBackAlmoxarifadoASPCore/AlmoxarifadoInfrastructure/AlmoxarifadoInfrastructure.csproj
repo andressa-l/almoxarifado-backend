@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Interfaces\NovaPasta\**" />
+    <Compile Remove="Data\Repositories\NovaPasta\**" />
+    <EmbeddedResource Remove="Data\Interfaces\NovaPasta\**" />
+    <EmbeddedResource Remove="Data\Repositories\NovaPasta\**" />
+    <None Remove="Data\Interfaces\NovaPasta\**" />
+    <None Remove="Data\Repositories\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.29" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AlmoxarifadoDomain\AlmoxarifadoDomain.csproj" />
+  </ItemGroup>
+
+</Project>
