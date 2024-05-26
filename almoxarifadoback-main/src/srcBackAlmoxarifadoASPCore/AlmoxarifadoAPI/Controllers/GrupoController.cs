@@ -66,5 +66,52 @@ namespace AlmoxarifadoAPI.Controllers
                 return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
             }
         }
+
+        //[HttpPut("{id}")]
+        //public IActionResult AtualizarGrupo(int id, GrupoPostDTO grupo) {
+        //    try {
+        //        var grupoAtualizado = _grupoService.AtualizarGrupo(id, grupo);
+        //        if (grupoAtualizado == null) {
+        //            return StatusCode(404, "Nenhum Grupo Encontrado com Esse ID");
+        //        }
+        //        return Ok(grupoAtualizado);
+        //    }
+        //    catch (Exception) {
+        //        return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
+        //    }
+        //}
+
+        //[HttpDelete("{id}")]
+        //public IActionResult ExcluirGrupo(int id) {
+        //    try {
+        //        _grupoService.ExcluirGrupo(id);
+        //        return NoContent(); 
+        //    }
+        //    catch (Exception) {
+        //        return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
+        //    }
+        //}
+
+        //[HttpPost("entrada")]
+        //public IActionResult RegistrarEntradaProduto(NotaFiscalDTO notaFiscal) {
+        //    try {
+
+        //        return Ok("Entrada de produtos registrada com sucesso");
+        //    }
+        //    catch (Exception ex) {
+        //        return StatusCode(500, $"Erro ao registrar entrada de produtos: {ex.Message}");
+        //    }
+        //}
+
+        //[HttpPost("saida")]
+        //public IActionResult RegistrarSaidaProduto(RequisicaoDTO requisicao) {
+        //    try {
+        //        return Ok("Saída de produtos registrada com sucesso");
+        //    }
+        //    catch (Exception ex) {
+        //        return StatusCode(500, $"Erro ao registrar saída de produtos: {ex.Message}");
+        //    }
+        //}
+
     }
 }

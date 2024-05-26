@@ -1,9 +1,4 @@
 ﻿using AlmoxarifadoDomain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlmoxarifadoInfrastructure.Data.Interfaces
 {
@@ -13,5 +8,7 @@ namespace AlmoxarifadoInfrastructure.Data.Interfaces
         Grupo ObterGrupoPorId(int id);
 
         Grupo CriarGrupo(Grupo grupo);
+        //void AtualizarGrupo(Grupo grupoExistente);
+        //void ExcluirGrupo(Grupo grupoExistente);
     }
 }
