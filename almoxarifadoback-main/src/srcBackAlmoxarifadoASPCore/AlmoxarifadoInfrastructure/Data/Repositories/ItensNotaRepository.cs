@@ -16,17 +16,17 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
             _context = context;
         }
 
-        public List<ItensNota> GetItensNota() 
+        public List<ItensNota> ObterTodosItensNota() 
         {
-            return _context.ItensNota.Select(i => new ItensNota {
+            return _context.ItensNota.Select(itemNota => new ItensNota {
 
-                EstLin = i.EstLin,
-                IdNota = i.IdNota,
-                IdPro = i.IdPro,
-                IdSec = i.IdSec,
-                ItemNum = i.ItemNum,
-                PreUnit = i.PreUnit,
-                QtdPro = i.QtdPro
+                EstLin = itemNota.EstLin,
+                IdNota = itemNota.IdNota,
+                IdPro = itemNota.IdPro,
+                IdSec = itemNota.IdSec,
+                ItemNum = itemNota.ItemNum,
+                PreUnit = itemNota.PreUnit,
+                QtdPro = itemNota.QtdPro
             }).ToList();
                 
         }
@@ -38,7 +38,7 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
             return itemNota;
         }
 
-        public ItensNota GetById(int itemNota) {
+        public ItensNota ObterItemNotaId(int itemNota) {
             
             return _context.ItensNota
                 .Select(i => new ItensNota {
@@ -50,24 +50,35 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
                     PreUnit = i.PreUnit,
                     QtdPro = i.QtdPro
                 })
-                .ToList().First(x => x?.ItemNum == itemNota);
+                .ToList().First(item => item.ItemNum == itemNota);
         }
 
-        public async Task<ItensNota> Update(ItensNota itemNota) {
-            _context.ItensNota.Update(itemNota);
-            await _context.SaveChangesAsync();
-            return itemNota;
-        }
+        public ItensNota AtualizarItemNota(ItensNota itemNota) 
+        {
+            var itemNotaAtual = _context.ItensNota.First(x => x.ItemNum == itemNota.ItemNum);
+            if (itemNotaAtual != null) 
+            {
+                itemNotaAtual.EstLin = itemNota.EstLin;
+                itemNotaAtual.IdNota = itemNota.IdNota;
+                itemNotaAtual.IdPro = itemNota.IdPro;
+                itemNotaAtual.IdSec = itemNota.IdSec;
+                itemNotaAtual.ItemNum = itemNota.ItemNum;
+                itemNotaAtual.PreUnit = itemNota.PreUnit;
+                itemNotaAtual.QtdPro = itemNota.QtdPro;
 
-        public async Task<bool> Delete(int itemNota) {
-            var itensNota = await _context.ItensNota.FindAsync(itemNota);
-            if (itensNota == null) {
-                return false;
+                _context.SaveChanges();
+                return itemNotaAtual;
             }
+            else {
+                throw new InvalidCastException("Item não encontrado");
+            }
+        }
 
-            _context.ItensNota.Remove(itensNota);
-            await _context.SaveChangesAsync();
-            return true;
+        public ItensNota DeletarItemNota(ItensNota itemNota) 
+        {
+            _context.ItensNota.Remove(itemNota);
+            _context.SaveChanges();
+            return itemNota;
         }
     }
 }

@@ -15,19 +15,8 @@ namespace AlmoxarifadoAPI.Controllers {
         [HttpGet]
         public IActionResult Get() {
             try {
-                var itensNota = _itensNotaService.GetItensNota();
+                var itensNota = _itensNotaService.ObterTodosItensNota();
                 return Ok(itensNota);
-            }
-            catch (Exception) {
-                return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CriarItemNota(ItensNotaPostDTO itemNota) {
-            try {
-                var itemNotaSalvo = _itensNotaService.CriarItensNota(itemNota);
-                return Ok(itemNotaSalvo);
             }
             catch (Exception) {
                 return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
@@ -35,34 +24,70 @@ namespace AlmoxarifadoAPI.Controllers {
         }
 
         [HttpGet("/ItensNota/{itemNota}")]
-        public IActionResult GetById(int itemNota) {
-            try {
-                var itensNota = _itensNotaService.GetById(itemNota);
-                if (itensNota == null) {
+        public IActionResult GetById(int itemNota) 
+        {
+            try 
+            {
+                var itensNota = _itensNotaService.ObterItemNotaId(itemNota);
+                if (itensNota == null) 
+                {
                     return StatusCode(404, "Nenhum Usuario Encontrado com Esse Codigo");
                 }
                 return Ok(itensNota);
-                }
-            catch (Exception) {
+            }
+            catch (Exception) 
+            {
 
                 return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
             }
         }
 
-        [HttpPut("{itemNota}")]
-        public async Task<IActionResult> Update(int itemNota, [FromBody] ItensNotaPostDTO itensNotaPostDTO) 
+        [HttpPost]
+        public IActionResult CriarItensNota(ItensNotaPostDTO itemNota) 
         {
-            var updatedItensNota = await _itensNotaService.Update(itensNotaPostDTO);
-            return Ok(updatedItensNota);
+            try 
+            {
+                var itemNotaSalvo = _itensNotaService.CriarItemNota(itemNota);
+                return Ok(itemNotaSalvo);
+            }
+            catch (Exception) 
+            {
+                return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
+            }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id) {
-            var deletedItemNota = await _itensNotaService.Delete(id);
-            if (deletedItemNota == null) {
-                return NotFound("Item Nota não encontrado.");
+
+
+        [HttpPut("{itemNota}")]
+        public async Task<IActionResult> AtualizarItemNota(int itemNota, [FromBody] ItensNotaPutDTO novoItem) 
+        {
+            try {
+                var itemNotaAtualizado = await _itensNotaService.AtualizarItemNota(itemNota, novoItem);
+                if (itemNotaAtualizado == null) {
+                    return StatusCode(404, "Nenhum item encontrado com este ID");
+                }
+                return Ok(itemNotaAtualizado);
             }
-            return Ok(deletedItemNota);
+            catch (Exception) 
+            {
+                return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
+            }
+        }
+
+        [HttpDelete("{itemNota}")]
+        public async Task<IActionResult> DeletarItemNota(int itemNota) 
+        {
+            try 
+            {
+                var itemNotaDeletado = await _itensNotaService.DeletarItemNota(itemNota);
+                if (itemNotaDeletado == null) {
+                    return StatusCode(404, "Nenhum item encontrado com este ID");
+                }
+                return Ok(itemNotaDeletado);
+            }
+            catch (Exception) {
+                return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
+            }
         }
     }
 }

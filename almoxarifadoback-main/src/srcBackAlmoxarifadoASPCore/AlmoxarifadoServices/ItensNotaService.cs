@@ -26,17 +26,18 @@ namespace AlmoxarifadoServices {
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        public List<ItensNotaGetDTO> GetItensNota() {
+        public List<ItensNotaGetDTO> ObterTodosItensNota() {
             var mapper = _mapperConfiguration.CreateMapper();
-            return mapper.Map<List<ItensNotaGetDTO>>(_itensNotaRepository.GetItensNota());
+            return mapper.Map<List<ItensNotaGetDTO>>(_itensNotaRepository.ObterTodosItensNota());
         }
 
-        public ItensNota GetById(int itemNota) 
+        public ItensNota ObterItemNotaPorId(int itemNota) 
         {
-            return _itensNotaRepository.GetById(itemNota);
+            return _itensNotaRepository.ObterItemNotaPorId(itemNota);
         }
 
-        public ItensNotaPostDTO CriarItensNota(ItensNotaPostDTO itemNota) {
+        public ItensNotaPostDTO CriarItemNota(ItensNotaPostDTO itemNota) 
+        {
             var itemNotaSalvo = _itensNotaRepository.CriarItensNota(
                     new ItensNota {
                         EstLin = itemNota.EstLin,
@@ -59,14 +60,29 @@ namespace AlmoxarifadoServices {
             };
         }
 
-        public async Task<ItensNotaGetDTO> Update(ItensNotaPostDTO itensNotaPostDTO) {
-            var itensNota = _mapper.Map<ItensNota>(itensNotaPostDTO);
-            var updatedItensNota = await _itensNotaRepository.Update(itensNota);
-            return _mapper.Map<ItensNotaGetDTO>(updatedItensNota);
+        public ItensNotaGetDTO AtualizarItemNota(int itemNota, ItensNotaPutDTO novoItemNota) {
+            var itemAtual = _itensNotaRepository.ObterItemNotaPorId(itemNota);
+            if (itemAtual != null) {
+                itemAtual.IdPro = novoItemNota.IdPro;
+                itemAtual.IdNota = novoItemNota.IdNota;
+                itemAtual.IdSec = novoItemNota.IdSec;
+                itemAtual.QtdPro = novoItemNota.QtdPro;
+                itemAtual.PreUnit = novoItemNota.PreUnit;
+                itemAtual.TotalItem = novoItemNota.TotalItem;
+                itemAtual.EstLin = novoItemNota.EstLin;
+
+                _itensNotaRepository.AtualizarItemNota(itemAtual);
+
+                var mapper = _mapperConfiguration.CreateMapper();
+                return mapper.Map<ItensNotaGetDTO>(itemAtual);
+            }
+            else {
+                return null;
+            }
         }
 
-        public async Task<ItensNotaGetDTO> Delete(int itemNota) {
-            var deletedItensNota = await _itensNotaRepository.Delete(itemNota);
+        public async Task<ItensNotaGetDTO> DeletarItemNota(int itemNota) {
+            var deletedItensNota = await _itensNotaRepository.DeletarItemNota(itemNota);
             return _mapper.Map<ItensNotaGetDTO>(deletedItensNota);
         }
     }
