@@ -2,11 +2,6 @@
 using AlmoxarifadoInfrastructure.Data.Interfaces;
 using AlmoxarifadoServices.DTO;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlmoxarifadoServices 
 {
@@ -27,21 +22,20 @@ namespace AlmoxarifadoServices
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        public List<NotaFiscalGetDTO> GetNotasFiscais() 
+        public List<NotaFiscalGetDTO> ObterTodasNotasFiscais() 
         {
             var mapper = _mapperConfiguration.CreateMapper();
-            return mapper.Map<List<NotaFiscalGetDTO>>(_notaFiscalRepository.GetNotasFiscais());
+            return mapper.Map<List<NotaFiscalGetDTO>>(_notaFiscalRepository.ObterTodasNotasFiscais());
         }
 
-        public NotaFiscalGetDTO GetById(int idNota) {
-            var notaFiscal = _notaFiscalRepository.GetById(idNota);
-            return _mapper.Map<NotaFiscalGetDTO>(notaFiscal);
+        public NotaFiscal ObterNotaFiscalPorId(int idNota) 
+        {
+            return _notaFiscalRepository.ObterNotaFiscalPorId(idNota);
         }
 
         public NotaFiscalGetDTO CriarNotaFiscal(NotaFiscalPostDTO notaFiscal) 
         {
-            var notaFiscalMapper = _notaFiscalRepository.CriarNotaFiscal
-                ( 
+            var notaFiscalSalva = _notaFiscalRepository.CriarNotaFiscal( 
                 new NotaFiscal
                 { 
                     IdFor = notaFiscal.IdFor,
@@ -57,37 +51,61 @@ namespace AlmoxarifadoServices
                     IdTipoNota = notaFiscal.IdTipoNota,
                     ObservacaoNota = notaFiscal.ObservacaoNota,
                     EmpenhoNum = 0
-                }
-                );
+                });
 
             return new NotaFiscalGetDTO 
             {
-                IdNota = notaFiscalMapper.IdNota,
-                IdFor = notaFiscalMapper.IdFor,
-                IdSec = notaFiscalMapper.IdSec,
-                DataNota = notaFiscalMapper.DataNota,
-                NumNota = notaFiscalMapper.NumNota,
-                ValorNota = notaFiscalMapper.ValorNota,
-                QtdItem = notaFiscalMapper.QtdItem,
-                Icms = notaFiscalMapper.Icms,
-                Iss = notaFiscalMapper.Iss,
-                Ano = notaFiscalMapper.Ano,
-                Mes = notaFiscalMapper.Mes,
-                IdTipoNota = notaFiscalMapper.IdTipoNota,
-                ObservacaoNota = notaFiscalMapper.ObservacaoNota,
-                EmpenhoNum = notaFiscalMapper.EmpenhoNum
+                IdNota = notaFiscalSalva.IdNota,
+                IdFor = notaFiscalSalva.IdFor,
+                IdSec = notaFiscalSalva.IdSec,
+                DataNota = notaFiscalSalva.DataNota,
+                NumNota = notaFiscalSalva.NumNota,
+                ValorNota = notaFiscalSalva.ValorNota,
+                QtdItem = notaFiscalSalva.QtdItem,
+                Icms = notaFiscalSalva.Icms,
+                Iss = notaFiscalSalva.Iss,
+                Ano = notaFiscalSalva.Ano,
+                Mes = notaFiscalSalva.Mes,
+                IdTipoNota = notaFiscalSalva.IdTipoNota,
+                ObservacaoNota = notaFiscalSalva.ObservacaoNota,
+                EmpenhoNum = notaFiscalSalva.EmpenhoNum
             };
         }
 
-        public async Task<NotaFiscalGetDTO> Update(NotaFiscalPostDTO notaFiscalPostDTO) {
-            var notaFiscal = _mapper.Map<NotaFiscal>(notaFiscalPostDTO);
-            var updatedNotaFiscal = await _notaFiscalRepository.Update(notaFiscal);
-            return _mapper.Map<NotaFiscalGetDTO>(updatedNotaFiscal);
+        public NotaFiscalGetDTO AtualizarNotaFiscal(int idNota, NotaFiscalPutDTO novaNotaFiscal) {
+            var notaAtual = _notaFiscalRepository.ObterNotaFiscalPorId(idNota);
+            if (notaAtual != null) {
+                notaAtual.IdFor = novaNotaFiscal.IdFor;
+                notaAtual.IdSec = novaNotaFiscal.IdSec;
+                notaAtual.NumNota = novaNotaFiscal.NumNota;
+                notaAtual.DataNota = novaNotaFiscal.DataNota;
+                notaAtual.ValorNota = novaNotaFiscal.ValorNota;
+                notaAtual.QtdItem = novaNotaFiscal.QtdItem;
+                notaAtual.Icms = novaNotaFiscal.Icms;
+                notaAtual.Iss = novaNotaFiscal.Iss;
+                notaAtual.Ano = novaNotaFiscal.Ano;
+                notaAtual.Mes = novaNotaFiscal.Mes;
+                notaAtual.IdTipoNota = novaNotaFiscal.IdTipoNota;
+                notaAtual.ObservacaoNota = novaNotaFiscal.ObservacaoNota;
+                notaAtual.EmpenhoNum = novaNotaFiscal.EmpenhoNum;
+
+                _notaFiscalRepository.AtualizarNotaFiscal(notaAtual);
+
+                var mapper = _mapperConfiguration.CreateMapper();
+                return mapper.Map<NotaFiscalGetDTO>(notaAtual);
+            }
+            else {
+                return null;
+            }
         }
 
-        public async Task<NotaFiscalGetDTO> Delete(int idNota) {
-            var deletedNotaFiscal = await _notaFiscalRepository.Delete(idNota);
-            return _mapper.Map<NotaFiscalGetDTO>(deletedNotaFiscal);
+        public NotaFiscalGetDTO DeletarNotaFiscal(NotaFiscal notaFiscal) {
+            var notaFiscalDeletada = _notaFiscalRepository.DeletarNotaFiscal(notaFiscal);
+            if (notaFiscalDeletada != null) {
+                var mapper = _mapperConfiguration.CreateMapper();
+                return mapper.Map<NotaFiscalGetDTO>(notaFiscalDeletada);
+            }
+            return null;
         }
     }
 }

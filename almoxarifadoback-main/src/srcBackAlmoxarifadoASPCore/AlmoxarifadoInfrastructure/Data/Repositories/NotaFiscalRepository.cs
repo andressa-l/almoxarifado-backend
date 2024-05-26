@@ -15,22 +15,22 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
             _context = context;
         }
 
-        public List<NotaFiscal> GetNotasFiscais() {
-            return _context.NotaFiscals.Select(n => new NotaFiscal {
-                IdNota = n.IdNota,
-                IdFor = n.IdFor ?? 0,
-                IdSec = n.IdSec,
-                NumNota = n.NumNota,
-                DataNota = n.DataNota ?? null,
-                ValorNota = n.ValorNota,
-                QtdItem = n.QtdItem,
-                Icms = n.Icms ?? 0,
-                Iss = n.Iss ?? 0,
-                Ano = n.Ano,
-                Mes = n.Mes ?? 0,
-                IdTipoNota = n.IdTipoNota,
-                EmpenhoNum = n.EmpenhoNum ?? 0,
-                ObservacaoNota = n.ObservacaoNota ?? "",
+        public List<NotaFiscal> ObterTodasNotasFiscais() {
+            return _context.NotaFiscals.Select(notasFiscais => new NotaFiscal {
+                IdNota = notasFiscais.IdNota,
+                IdFor = notasFiscais.IdFor ?? 0,
+                IdSec = notasFiscais.IdSec,
+                NumNota = notasFiscais.NumNota,
+                DataNota = notasFiscais.DataNota ?? null,
+                ValorNota = notasFiscais.ValorNota,
+                QtdItem = notasFiscais.QtdItem,
+                Icms = notasFiscais.Icms ?? 0,
+                Iss = notasFiscais.Iss ?? 0,
+                Ano = notasFiscais.Ano,
+                Mes = notasFiscais.Mes ?? 0,
+                IdTipoNota = notasFiscais.IdTipoNota,
+                EmpenhoNum = notasFiscais.EmpenhoNum ?? 0,
+                ObservacaoNota = notasFiscais.ObservacaoNota ?? "",
             }).ToList();
         }
 
@@ -41,46 +41,53 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
             return notaFiscal;
         }
 
-        public NotaFiscal GetById(int notaFiscal) {
+        public NotaFiscal ObterNotaFiscalPorId(int idNota) 
+        {
             return _context.NotaFiscals
-                .Select(n => new NotaFiscal {
-                    IdNota = n.IdNota,
-                    IdFor = n.IdFor ?? 0,
-                    IdSec = n.IdSec,
-                    NumNota = n.NumNota,
-                    DataNota = n.DataNota ?? null,
-                    ValorNota = n.ValorNota,
-                    QtdItem = n.QtdItem,
-                    Icms = n.Icms ?? 0,
-                    Iss = n.Iss ?? 0,
-                    Ano = n.Ano,
-                    Mes = n.Mes ?? 0,
-                    IdTipoNota = n.IdTipoNota,
-                    EmpenhoNum = n.EmpenhoNum ?? 0,
-                    ObservacaoNota = n.ObservacaoNota ?? "",
+                .Select(notas => new NotaFiscal {
+                    IdNota = notas.IdNota,
+                    IdFor = notas.IdFor ?? 0,
+                    IdSec = notas.IdSec,
+                    NumNota = notas.NumNota,
+                    DataNota = notas.DataNota ?? null,
+                    ValorNota = notas.ValorNota,
+                    QtdItem = notas.QtdItem,
+                    Icms = notas.Icms ?? 0,
+                    Iss = notas.Iss ?? 0,
+                    Ano = notas.Ano,
+                    Mes = notas.Mes ?? 0,
+                    IdTipoNota = notas.IdTipoNota,
+                    EmpenhoNum = notas.EmpenhoNum ?? 0,
+                    ObservacaoNota = notas.ObservacaoNota ?? "",
                 })
-                .ToList().First(x => x?.IdNota == notaFiscal);
+                .ToList().First(x => x?.IdNota == idNota);
         }
 
-        public async Task<NotaFiscal> Update(NotaFiscal notaFiscal) {
-            _context.NotaFiscals.Update(notaFiscal);
-            await _context.SaveChangesAsync();
-            return notaFiscal;
-        }
-
-        public async Task<bool> Delete(int notaFiscal) {
-            var notasFiscal = await _context.NotaFiscals.FindAsync(notaFiscal);
-            if (notasFiscal == null) {
-                return false;
+        public NotaFiscal AtualizarNotaFiscal(NotaFiscal notaFiscal) {
+            var notaFiscalAtual = _context.NotaFiscals.FirstOrDefault(x => x.IdNota == notaFiscal.IdNota);
+            if (notaFiscalAtual != null) {
+                notaFiscalAtual.IdFor = notaFiscal.IdFor;
+                notaFiscalAtual.IdSec = notaFiscal.IdSec;
+                notaFiscalAtual.NumNota = notaFiscal.NumNota;
+                notaFiscalAtual.DataNota = notaFiscal.DataNota;
+                notaFiscalAtual.ValorNota = notaFiscal.ValorNota;
+                notaFiscalAtual.QtdItem = notaFiscal.QtdItem;
+                notaFiscalAtual.Icms = notaFiscal.Icms;
+                notaFiscalAtual.Iss = notaFiscal.Iss;
+                notaFiscalAtual.Ano = notaFiscal.Ano;
+                notaFiscalAtual.Mes = notaFiscal.Mes;
+                notaFiscalAtual.IdTipoNota = notaFiscal.IdTipoNota;
+                notaFiscalAtual.EmpenhoNum = notaFiscal.EmpenhoNum;
+                notaFiscalAtual.ObservacaoNota = notaFiscal.ObservacaoNota;
+                _context.SaveChanges();
             }
-
-            _context.NotaFiscals.Remove(notasFiscal);
-            await _context.SaveChangesAsync();
-            return true;
+            return notaFiscalAtual;
         }
 
-        Task<NotaFiscal> INotaFiscalRepository.GetById(int notaFiscal) {
-            throw new NotImplementedException();
+        public NotaFiscal DeletarNotaFiscal(NotaFiscal notaFiscal) {
+            _context.NotaFiscals.Remove(notaFiscal);
+            _context.SaveChanges();
+            return notaFiscal;
         }
     }
 }

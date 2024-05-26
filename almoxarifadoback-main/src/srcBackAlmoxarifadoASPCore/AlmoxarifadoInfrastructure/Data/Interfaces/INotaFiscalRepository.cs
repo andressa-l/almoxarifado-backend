@@ -3,10 +3,10 @@
 namespace AlmoxarifadoInfrastructure.Data.Interfaces {
     public interface INotaFiscalRepository 
     {
-        List<NotaFiscal> GetNotasFiscais();
+        List<NotaFiscal> ObterTodasNotasFiscais();
+        NotaFiscal ObterNotaFiscalPorId(int idNota);
         NotaFiscal CriarNotaFiscal(NotaFiscal notaFiscal);
-        Task <NotaFiscal> GetById(int notaFiscal);
-        Task <NotaFiscal> Update(NotaFiscal notaFiscal);
-        Task <bool> Delete(int idNota);
+        NotaFiscal AtualizarNotaFiscal(NotaFiscal notaFiscal);
+        NotaFiscal DeletarNotaFiscal(NotaFiscal notaFiscal);
     }
 }
