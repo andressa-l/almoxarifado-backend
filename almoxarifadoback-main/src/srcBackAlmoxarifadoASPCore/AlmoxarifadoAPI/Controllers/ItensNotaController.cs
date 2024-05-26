@@ -1,4 +1,5 @@
-﻿using AlmoxarifadoServices;
+﻿using AlmoxarifadoDomain.Models;
+using AlmoxarifadoServices;
 using AlmoxarifadoServices.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ namespace AlmoxarifadoAPI.Controllers {
         {
             try 
             {
-                var itensNota = _itensNotaService.ObterItemNotaId(itemNota);
+                var itensNota = _itensNotaService.ObterItemNotaPorId(itemNota);
                 if (itensNota == null) 
                 {
                     return StatusCode(404, "Nenhum Usuario Encontrado com Esse Codigo");
@@ -59,10 +60,10 @@ namespace AlmoxarifadoAPI.Controllers {
 
 
         [HttpPut("{itemNota}")]
-        public async Task<IActionResult> AtualizarItemNota(int itemNota, [FromBody] ItensNotaPutDTO novoItem) 
+        public IActionResult AtualizarItemNota(int itemNota, [FromBody] ItensNotaPutDTO novoItem) 
         {
             try {
-                var itemNotaAtualizado = await _itensNotaService.AtualizarItemNota(itemNota, novoItem);
+                var itemNotaAtualizado = _itensNotaService.AtualizarItemNota(itemNota, novoItem);
                 if (itemNotaAtualizado == null) {
                     return StatusCode(404, "Nenhum item encontrado com este ID");
                 }
@@ -75,15 +76,21 @@ namespace AlmoxarifadoAPI.Controllers {
         }
 
         [HttpDelete("{itemNota}")]
-        public async Task<IActionResult> DeletarItemNota(int itemNota) 
+        public IActionResult DeletarItemNota(int itemNota) 
         {
             try 
             {
-                var itemNotaDeletado = await _itensNotaService.DeletarItemNota(itemNota);
-                if (itemNotaDeletado == null) {
+                var itemNotaAtual = _itensNotaService.ObterItemNotaPorId(itemNota);
+                if (itemNotaAtual == null) {
                     return StatusCode(404, "Nenhum item encontrado com este ID");
                 }
-                return Ok(itemNotaDeletado);
+
+                var itemDeletado = _itensNotaService.DeletarItemNota(itemNotaAtual);
+                if (itemDeletado == null) {
+                    return StatusCode(404, "Ocorreu um erro ao excluir o item");
+                }
+
+                return Ok(itemDeletado);
             }
             catch (Exception) {
                 return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");

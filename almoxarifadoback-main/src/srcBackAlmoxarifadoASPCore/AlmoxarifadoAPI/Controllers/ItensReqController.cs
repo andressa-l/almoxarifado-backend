@@ -76,7 +76,22 @@ namespace AlmoxarifadoAPI.Controllers {
         [HttpDelete("{numItem}")]
         public IActionResult Delete(int numItem) 
         {
-            
+            try {
+                var itemReq = _itensReqService.ObterItemRequisicaoPorId(numItem);
+                if (itemReq == null) {
+                    return StatusCode(404, "Nenhum item encontrado com este ID");
+                }
+
+                var itemReqDeletado = _itensReqService.DeletarItemRequisicao(itemReq);
+                if (itemReqDeletado == null) {
+                    return StatusCode(404, "Ocorreu um erro ao excluir o item");
+                }
+
+                return Ok(itemReqDeletado);
+            }
+            catch (Exception) {
+                return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
+            }
         }
     }
 }
