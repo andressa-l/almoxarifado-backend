@@ -7,6 +7,6 @@ namespace AlmoxarifadoInfrastructure.Data.Interfaces {
         ItensNota ObterItemNotaPorId(int itemNota);
         ItensNota CriarItensNota(ItensNota itemNota);
         ItensNota AtualizarItemNota(ItensNota itemNota);
-        ItensNota DeletarItemNota(int itemNota);
+        ItensNota DeletarItemNota(ItensNota itemNota);
     }
 }

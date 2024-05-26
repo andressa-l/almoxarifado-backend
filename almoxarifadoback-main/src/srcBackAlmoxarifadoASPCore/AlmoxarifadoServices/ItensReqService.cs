@@ -11,7 +11,8 @@ namespace AlmoxarifadoServices {
         private readonly IMapper _mapper;
         private readonly MapperConfiguration mapperConfiguration;
 
-        public ItensReqService(IItensReqRepository itensReqRepository) {
+        public ItensReqService(IItensReqRepository itensReqRepository) 
+        {
             _itensReqRepository = itensReqRepository;
             mapperConfiguration = new MapperConfiguration(cfg => {
                 cfg.CreateMap<ItensReqPostDTO, ItensReqGetDTO>();
@@ -21,30 +22,71 @@ namespace AlmoxarifadoServices {
             _mapper = mapperConfiguration.CreateMapper();
         }
 
-        public async Task<IEnumerable<ItensReqGetDTO>> GetAll() {
-            var itensReqs = await _itensReqRepository.GetAll();
-            return _mapper.Map<IEnumerable<ItensReqGetDTO>>(itensReqs);
+        public List<ItensReqGetDTO> ObterTodosItensReq() 
+        {
+            var mapper = mapperConfiguration.CreateMapper();
+            return mapper.Map<List<ItensReqGetDTO>>(_itensReqRepository.ObterTodosItensReq());
         }
 
-        public async Task<ItensReqGetDTO> GetById(int numItem) {
-            var itensReq = await _itensReqRepository.GetById(numItem);
-            return _mapper.Map<ItensReqGetDTO>(itensReq);
+        public ItensReq ObterItemRequisicaoPorId(int numItem) 
+        {            
+            return _itensReqRepository.ObterItemRequisicaoPorId(numItem);
         }
 
-        public async Task<ItensReqGetDTO> Create(ItensReqPostDTO itensReqPostDTO) {
-            var itensReq = _mapper.Map<ItensReq>(itensReqPostDTO);
-            var createdItensReq = await _itensReqRepository.Create(itensReq);
-            return _mapper.Map<ItensReqGetDTO>(createdItensReq);
+        public ItensReqGetDTO CriarItemRequisicao(ItensReqPostDTO itensReq) 
+        {
+            var itemReqSalvo = _itensReqRepository.CriarItemRequisicao(
+                               new ItensReq {
+                                   NumItem = itensReq.NumItem,
+                                   IdPro = itensReq.IdPro,
+                                   IdReq = itensReq.IdReq,
+                                   IdSec = itensReq.IdSec,
+                                   QtdPro = itensReq.QtdPro,
+                                   PreUnit = itensReq.PreUnit,
+                                   TotalItem = itensReq.TotalItem,
+                                   TotalReal = itensReq.TotalReal
+                               });
+            return new ItensReqGetDTO 
+            {
+                NumItem = itemReqSalvo.NumItem,
+                IdPro = itemReqSalvo.IdPro,
+                IdReq = itemReqSalvo.IdReq,
+                IdSec = itemReqSalvo.IdSec,
+                QtdPro = itemReqSalvo.QtdPro,
+                PreUnit = itemReqSalvo.PreUnit,
+                TotalItem = itemReqSalvo.TotalItem,
+                TotalReal = itemReqSalvo.TotalReal
+            };
         }
 
-        public async Task<ItensReqGetDTO> Update(ItensReqPostDTO itensReqPostDTO) {
-            var itensReq = _mapper.Map<ItensReq>(itensReqPostDTO);
-            var updatedItensReq = await _itensReqRepository.Update(itensReq);
-            return _mapper.Map<ItensReqGetDTO>(updatedItensReq);
+        public ItensReqGetDTO AtualizarItemRequisicao(int numeroItem, ItensRequisicaoPutDTO itemReqNovo) 
+        {
+            var itemReqAtual = _itensReqRepository.ObterItemRequisicaoPorId(numeroItem);
+            if (itemReqAtual != null) 
+            {
+                itemReqAtual.IdPro = itemReqNovo.IdPro;
+                itemReqAtual.IdReq = itemReqNovo.IdReq;
+                itemReqAtual.IdSec = itemReqNovo.IdSec;
+                itemReqAtual.QtdPro = itemReqNovo.QtdPro;
+                itemReqAtual.PreUnit = itemReqNovo.PreUnit;
+                itemReqAtual.TotalItem = itemReqNovo.TotalItem;
+                itemReqAtual.TotalReal = itemReqNovo.TotalReal;
+                _itensReqRepository.AtualizarItemRequisicao(itemReqAtual);
+                var mapper = mapperConfiguration.CreateMapper();
+                return mapper.Map<ItensReqGetDTO>(itemReqAtual);
+            }
+            else {
+                return null;
+            }
         }
 
-        public async Task<bool> Delete(int numItem) {
-            return await _itensReqRepository.Delete(numItem);
+        public ItensReqGetDTO DeletarItemRequisicao(ItensReq itensReq) {
+            var itemReqDeletado = _itensReqRepository.DeletarItemRequisicao(itensReq);
+            if (itemReqDeletado != null ) {
+                var mapper = mapperConfiguration.CreateMapper();
+                return mapper.Map<ItensReqGetDTO>(itemReqDeletado);
+            }
+            return null;
         }
     }
 }

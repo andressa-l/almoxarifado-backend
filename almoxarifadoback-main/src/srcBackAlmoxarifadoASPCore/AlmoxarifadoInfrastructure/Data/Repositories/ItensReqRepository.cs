@@ -5,42 +5,75 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AlmoxarifadoInfrastructure.Data.Repositories {
-    public class ItensReqRepository : IItensReqRepository {
+    public class ItensReqRepository : IItensReqRepository 
+    {
         private readonly xAlmoxarifadoContext _context;
-
         public ItensReqRepository(xAlmoxarifadoContext context) {
             _context = context;
         }
 
-        public async Task<IEnumerable<ItensReq>> GetAll() {
-            return await _context.ItensReqs.ToListAsync();
+        public List<ItensReq> ObterTodosItensReq() 
+        {
+            return _context.ItensReqs.Select(itemReq => new ItensReq 
+            {
+                NumItem = itemReq.NumItem,
+                IdPro = itemReq.IdPro,
+                IdReq = itemReq.IdReq,
+                IdSec = itemReq.IdSec,
+                QtdPro = itemReq.QtdPro,
+                PreUnit = itemReq.PreUnit,
+                TotalItem = itemReq.TotalItem,
+                TotalReal = itemReq.TotalReal
+            }).ToList();
+            
         }
 
-        public async Task<ItensReq> GetById(int numItem) {
-            return await _context.ItensReqs.FindAsync(numItem);
+        public ItensReq ObterItemRequisicaoPorId(int numeroItem) 
+        {
+            return _context.ItensReqs
+                .Select(itemReq => new ItensReq {
+                    NumItem = itemReq.NumItem,
+                    IdPro = itemReq.IdPro,
+                    IdReq = itemReq.IdReq,
+                    IdSec = itemReq.IdSec,
+                    QtdPro = itemReq.QtdPro,
+                    PreUnit = itemReq.PreUnit,
+                    TotalItem = itemReq.TotalItem,
+                    TotalReal = itemReq.TotalReal
+                })
+                .ToList().First(item => item?.NumItem == numeroItem);
         }
 
-        public async Task<ItensReq> Create(ItensReq itensReq) {
+        public ItensReq CriarItemRequisicao(ItensReq itensReq) {
             _context.ItensReqs.Add(itensReq);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return itensReq;
         }
 
-        public async Task<ItensReq> Update(ItensReq itensReq) {
-            _context.ItensReqs.Update(itensReq);
-            await _context.SaveChangesAsync();
-            return itensReq;
-        }
-
-        public async Task<bool> Delete(int numItem) {
-            var itensReq = await _context.ItensReqs.FindAsync(numItem);
-            if (itensReq == null) {
-                return false;
+        public ItensReq AtualizarItemRequisicao(ItensReq itensReq) 
+        {
+            var itemReqAtual = _context.ItensReqs.FirstOrDefault(x => x.IdReq == itensReq.IdReq);
+            if (itemReqAtual != null) {
+                itemReqAtual.IdPro = itensReq.IdPro;
+                itemReqAtual.IdReq = itensReq.IdReq;
+                itemReqAtual.IdSec = itensReq.IdSec;
+                itemReqAtual.QtdPro = itensReq.QtdPro;
+                itemReqAtual.PreUnit = itensReq.PreUnit;
+                itemReqAtual.TotalItem = itensReq.TotalItem;
+                itemReqAtual.TotalReal = itensReq.TotalReal;
+                _context.SaveChanges();
+                return itemReqAtual;
             }
+            else {
+                throw new InvalidOperationException("Item da Requisição não encontrado");
+            }
+        }
 
+        public ItensReq DeletarItemRequisicao(ItensReq itensReq) 
+        {
             _context.ItensReqs.Remove(itensReq);
-            await _context.SaveChangesAsync();
-            return true;
+            _context.SaveChanges();
+            return itensReq;
         }
     }
 }

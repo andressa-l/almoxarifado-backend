@@ -79,5 +79,8 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
             return true;
         }
 
+        Task<NotaFiscal> INotaFiscalRepository.GetById(int notaFiscal) {
+            throw new NotImplementedException();
+        }
     }
 }

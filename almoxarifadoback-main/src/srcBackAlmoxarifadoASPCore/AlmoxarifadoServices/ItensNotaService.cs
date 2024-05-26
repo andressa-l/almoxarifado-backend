@@ -81,9 +81,14 @@ namespace AlmoxarifadoServices {
             }
         }
 
-        public async Task<ItensNotaGetDTO> DeletarItemNota(int itemNota) {
-            var deletedItensNota = await _itensNotaRepository.DeletarItemNota(itemNota);
-            return _mapper.Map<ItensNotaGetDTO>(deletedItensNota);
+        public ItensNotaGetDTO DeletarItemNota(ItensNota itemNota) {
+            var itemNotaDeletado = _itensNotaRepository.DeletarItemNota(itemNota);
+            if (itemNotaDeletado != null) 
+            {
+                var mapper = _mapperConfiguration.CreateMapper();
+                return mapper.Map<ItensNotaGetDTO>(itemNotaDeletado);
+            }
+            return null;
         }
     }
 }

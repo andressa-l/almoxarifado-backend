@@ -18,17 +18,16 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
 
         public List<ItensNota> ObterTodosItensNota() 
         {
-            return _context.ItensNota.Select(itemNota => new ItensNota {
-
-                EstLin = itemNota.EstLin,
-                IdNota = itemNota.IdNota,
-                IdPro = itemNota.IdPro,
-                IdSec = itemNota.IdSec,
+            return _context.ItensNota.Select(itemNota => new ItensNota 
+            {
                 ItemNum = itemNota.ItemNum,
+                IdPro = itemNota.IdPro,
+                IdNota = itemNota.IdNota,
+                IdSec = itemNota.IdSec,
+                QtdPro = itemNota.QtdPro,
                 PreUnit = itemNota.PreUnit,
-                QtdPro = itemNota.QtdPro
+                EstLin = itemNota.EstLin,
             }).ToList();
-                
         }
 
         public ItensNota CriarItensNota(ItensNota itemNota) 
@@ -38,7 +37,7 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
             return itemNota;
         }
 
-        public ItensNota ObterItemNotaId(int itemNota) {
+        public ItensNota ObterItemNotaPorId(int itemNota) {
             
             return _context.ItensNota
                 .Select(i => new ItensNota {
