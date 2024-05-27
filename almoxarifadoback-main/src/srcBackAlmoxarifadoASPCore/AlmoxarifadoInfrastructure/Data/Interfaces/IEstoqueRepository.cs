@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace AlmoxarifadoInfrastructure.Data.Interfaces {
     public interface IEstoqueRepository 
     {
-        List<Estoque> ObterTodosOsProdutosNoEstoque();
         Estoque ObterEstoquePorProduto(int idProduto);
         void AtualizarEstoque(Estoque estoque);
         void CriarEstoque(Estoque estoque);
+        List<Estoque> ObterTodosOsProdutosNoEstoque();
     }
 }

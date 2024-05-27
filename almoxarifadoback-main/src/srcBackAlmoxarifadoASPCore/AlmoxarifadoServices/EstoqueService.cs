@@ -1,14 +1,17 @@
 ﻿using AlmoxarifadoDomain.Models;
 using AlmoxarifadoInfrastructure.Data.Interfaces;
+using CsvHelper;
+using System.Globalization;
 
 namespace AlmoxarifadoServices {
     public class EstoqueService 
     {
         private readonly IEstoqueRepository _estoqueRepository;
+        private readonly IProdutoRepository _produtoRepository;
 
-        public EstoqueService(IEstoqueRepository estoqueRepository) 
-        {
+        public EstoqueService(IEstoqueRepository estoqueRepository, IProdutoRepository produtoRepository) {
             _estoqueRepository = estoqueRepository;
+            _produtoRepository = produtoRepository;
         }
 
         public void AtualizarEstoqueAoEntrarNotaFiscal(ItensNota itemNota) 
@@ -32,10 +35,32 @@ namespace AlmoxarifadoServices {
         {
             var estoque = _estoqueRepository.ObterEstoquePorProduto(itemRequisicao.IdPro);
 
-            if (estoque != null) {
-                VerificarQuantidadeEstoqueSufciente(estoque, itemRequisicao.QtdPro);
-                estoque.QtdPro -= itemRequisicao.QtdPro;
-                _estoqueRepository.AtualizarEstoque(estoque);
+            if (estoque != null) 
+            {
+                var produto = _produtoRepository.ObterProdutoPorId(itemRequisicao.IdPro);
+
+                if (produto != null) 
+                {
+                    VerificarQuantidadeEstoqueSufciente(estoque, itemRequisicao.QtdPro);
+
+                    if (estoque.QtdPro >= itemRequisicao.QtdPro) 
+                    {
+                        estoque.QtdPro -= itemRequisicao.QtdPro;
+                        _estoqueRepository.AtualizarEstoque(estoque);
+
+                        if (estoque.QtdPro < produto.EstoqueMin) 
+                        {
+                            CriarArquivoCSV(estoque, itemRequisicao);
+                        }
+                    }
+                    else {
+                        throw new InvalidOperationException("Quantidade insuficiente em estoque");
+                    }
+
+                }
+                else {
+                    throw new InvalidOperationException("Produto não encontrado");
+                }
             }
             else {
                 throw new InvalidOperationException("Produto não encontrado no estoque");
@@ -46,6 +71,21 @@ namespace AlmoxarifadoServices {
         {
             if (estoque.QtdPro < quantidade) {
                 throw new InvalidOperationException("Quantidade insuficiente em estoque");
+            }
+        }
+
+        private void CriarArquivoCSV(Estoque estoque, ItensReq itemRequisicao) 
+        {
+            // Criação de arquivo CSV
+            string nomeArquivo = $"produtosAbaixoMinimoEm_{DateTime.Now:yyyyMMdd}_{itemRequisicao.IdReq}.csv";
+            var dados = new List<string[]>
+            {
+                new string[] { "Código Produto", "Código Secretaria", "Código Requisição", "Quantidade Atual", "Data do Registro" },
+                new string[] { estoque.IdPro.ToString(), itemRequisicao.IdSec.ToString(), itemRequisicao.IdReq.ToString(), estoque.QtdPro.ToString(), DateTime.Now.ToString() }
+            };
+            using (var writer = new StreamWriter(nomeArquivo))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+                csv.WriteRecords(dados);
             }
         }
     } 
