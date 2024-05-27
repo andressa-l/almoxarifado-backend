@@ -79,6 +79,16 @@ namespace AlmoxarifadoAPI.Controllers {
                 if (updatedItensReq == null) {
                     return StatusCode(404, "Nenhum item encontrado com este ID");
                 }
+                _estoqueService.AtualizarEstoqueAoSairRequisicao(new ItensReq {
+                    NumItem = updatedItensReq.NumItem,
+                    IdPro = updatedItensReq.IdPro,
+                    IdReq = updatedItensReq.IdReq,
+                    IdSec = updatedItensReq.IdSec,
+                    QtdPro = updatedItensReq.QtdPro,
+                    PreUnit = updatedItensReq.PreUnit,
+                    TotalItem = updatedItensReq.TotalItem,
+                    TotalReal = updatedItensReq.TotalReal
+                });
                 return Ok(updatedItensReq);
             }
             catch (Exception) {

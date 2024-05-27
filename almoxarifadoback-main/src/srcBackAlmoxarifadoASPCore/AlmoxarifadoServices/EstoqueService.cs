@@ -33,16 +33,19 @@ namespace AlmoxarifadoServices {
             var estoque = _estoqueRepository.ObterEstoquePorProduto(itemRequisicao.IdPro);
 
             if (estoque != null) {
-                if (estoque.QtdPro >= itemRequisicao.QtdPro) {
-                    estoque.QtdPro -= itemRequisicao.QtdPro;
-                    _estoqueRepository.AtualizarEstoque(estoque);
-                }
-                else {
-                    throw new InvalidOperationException("Quantidade insuficiente em estoque");
-                }
+                VerificarQuantidadeEstoqueSufciente(estoque, itemRequisicao.QtdPro);
+                estoque.QtdPro -= itemRequisicao.QtdPro;
+                _estoqueRepository.AtualizarEstoque(estoque);
             }
             else {
                 throw new InvalidOperationException("Produto não encontrado no estoque");
+            }
+        }
+
+        private void VerificarQuantidadeEstoqueSufciente(Estoque estoque, decimal quantidade) 
+        {
+            if (estoque.QtdPro < quantidade) {
+                throw new InvalidOperationException("Quantidade insuficiente em estoque");
             }
         }
     } 
