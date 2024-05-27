@@ -3,27 +3,46 @@ using AlmoxarifadoInfrastructure.Data.Interfaces;
 using AlmoxarifadoInfrastructure.Data.Repositories;
 using AlmoxarifadoServices;
 using Microsoft.EntityFrameworkCore;
+using static AlmoxarifadoInfrastructure.Data.Repositories.ConexaoRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<ContextSQL>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoDBSQL")));
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-//Carregando Classes de Repositories
-builder.Services.AddScoped<GrupoService>();
-builder.Services.AddScoped<IGrupoRepository,GrupoRepository>();
+builder.Services.AddSingleton<PrimeiraConexao>(cr => new PrimeiraConexao(builder.Configuration));
+builder.Services.AddSingleton<ReplicaConexao>(cr => new ReplicaConexao(builder.Configuration));
+
+builder.Services.AddSingleton<AlmoxarifadoInfrastructure.Data.ConexaoService>();
+
+builder.Services.AddDbContext<xAlmoxarifadoContext>((serviceProvider, options) => 
+{
+    var conexaoService = serviceProvider.GetRequiredService<AlmoxarifadoInfrastructure.Data.ConexaoService>();
+    var connectionString = conexaoService.GetConnectionString();
+    options.UseSqlServer(connectionString);
+});
+
+builder.Services.AddScoped<xAlmoxarifadoContext>();
 
 
+builder.Services.AddScoped<INotaFiscalRepository, NotaFiscalRepository>();
+builder.Services.AddScoped<NotaFiscalService>();
+builder.Services.AddScoped<IItensNotaRepository, ItensNotaRepository>();
+builder.Services.AddScoped<ItensNotaService>();
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+builder.Services.AddScoped<ProdutoService>();
+builder.Services.AddScoped<IRequisicaoRepository, RequisicaoRepository>();
+builder.Services.AddScoped<RequisicaoService>();
+builder.Services.AddScoped<IItensReqRepository, ItensReqRepository>();
+builder.Services.AddScoped<ItensReqService>();
+builder.Services.AddScoped<IEstoqueRepository, EstoqueRepository>();
+builder.Services.AddScoped<EstoqueService>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

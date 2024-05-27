@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlmoxarifadoDomain.Models
 {
-    public class Grupo
+    public partial class Grupo
     {
-        public int ID_GRU { get; set; }
-        public string NOME_GRU { get; set; }
-        public string? SUGESTAO_GRU { get; set; }
+        public Grupo()
+        {
+            Subgrupos = new HashSet<Subgrupo>();
+        }
+
+        public int IdGru { get; set; }
+        public string NomeGru { get; set; } = null!;
+        public string? SugestaoGru { get; set; }
+
+        public virtual ICollection<Subgrupo> Subgrupos { get; set; }
     }
 }
-
