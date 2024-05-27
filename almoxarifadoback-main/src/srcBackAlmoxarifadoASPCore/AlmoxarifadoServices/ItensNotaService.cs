@@ -36,27 +36,29 @@ namespace AlmoxarifadoServices {
             return _itensNotaRepository.ObterItemNotaPorId(itemNota);
         }
 
-        public ItensNotaPostDTO CriarItemNota(ItensNotaPostDTO itemNota) 
+        public ItensNotaGetDTO CriarItemNota(ItensNotaPostDTO itemNota) 
         {
             var itemNotaSalvo = _itensNotaRepository.CriarItensNota(
                     new ItensNota {
-                        EstLin = itemNota.EstLin,
-                        IdNota = itemNota.IdNota,
-                        IdPro = itemNota.IdPro,
-                        IdSec = itemNota.IdSec,
                         ItemNum = itemNota.ItemNum,
+                        IdPro = itemNota.IdPro,
+                        IdNota = itemNota.IdNota,
+                        IdSec = itemNota.IdSec,
+                        QtdPro = itemNota.QtdPro,
                         PreUnit = itemNota.PreUnit,
-                        QtdPro = itemNota.QtdPro
+                        TotalItem = itemNota.QtdPro * itemNota.PreUnit,
+                        EstLin = itemNota.EstLin,
                     });
 
-            return new ItensNotaPostDTO {
-                EstLin = itemNotaSalvo.EstLin,
-                IdNota = itemNotaSalvo.IdNota,
-                IdPro = itemNotaSalvo.IdPro,
-                IdSec = itemNotaSalvo.IdSec,
+            return new ItensNotaGetDTO {
                 ItemNum = itemNotaSalvo.ItemNum,
+                IdPro = itemNotaSalvo.IdPro,
+                IdNota = itemNotaSalvo.IdNota,
+                IdSec = itemNotaSalvo.IdSec,
+                QtdPro = itemNotaSalvo.QtdPro,
                 PreUnit = itemNotaSalvo.PreUnit,
-                QtdPro = itemNotaSalvo.QtdPro
+                TotalItem = itemNotaSalvo.QtdPro * itemNota.PreUnit,
+                EstLin = itemNotaSalvo.EstLin,
             };
         }
 
@@ -68,7 +70,7 @@ namespace AlmoxarifadoServices {
                 itemAtual.IdSec = novoItemNota.IdSec;
                 itemAtual.QtdPro = novoItemNota.QtdPro;
                 itemAtual.PreUnit = novoItemNota.PreUnit;
-                itemAtual.TotalItem = novoItemNota.TotalItem;
+                itemAtual.TotalItem = novoItemNota.QtdPro * novoItemNota.PreUnit;
                 itemAtual.EstLin = novoItemNota.EstLin;
 
                 _itensNotaRepository.AtualizarItemNota(itemAtual);

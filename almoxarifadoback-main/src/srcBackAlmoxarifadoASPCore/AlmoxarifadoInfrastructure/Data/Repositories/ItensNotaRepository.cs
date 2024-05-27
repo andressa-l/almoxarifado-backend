@@ -26,6 +26,7 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
                 IdSec = itemNota.IdSec,
                 QtdPro = itemNota.QtdPro,
                 PreUnit = itemNota.PreUnit,
+                TotalItem = itemNota.TotalItem,
                 EstLin = itemNota.EstLin,
             }).ToList();
         }
@@ -47,6 +48,7 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
                     IdSec = i.IdSec,
                     ItemNum = i.ItemNum,
                     PreUnit = i.PreUnit,
+                    TotalItem = i.TotalItem,
                     QtdPro = i.QtdPro
                 })
                 .ToList().First(item => item.ItemNum == itemNota);
@@ -54,15 +56,15 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
 
         public ItensNota AtualizarItemNota(ItensNota itemNota) 
         {
-            var itemNotaAtual = _context.ItensNota.First(x => x.ItemNum == itemNota.ItemNum);
+            var itemNotaAtual = _context.ItensNota.FirstOrDefault(x => x.ItemNum == itemNota.ItemNum);
             if (itemNotaAtual != null) 
             {
                 itemNotaAtual.EstLin = itemNota.EstLin;
                 itemNotaAtual.IdNota = itemNota.IdNota;
                 itemNotaAtual.IdPro = itemNota.IdPro;
                 itemNotaAtual.IdSec = itemNota.IdSec;
-                itemNotaAtual.ItemNum = itemNota.ItemNum;
                 itemNotaAtual.PreUnit = itemNota.PreUnit;
+                itemNotaAtual.TotalItem = itemNota.TotalItem;
                 itemNotaAtual.QtdPro = itemNota.QtdPro;
 
                 _context.SaveChanges();

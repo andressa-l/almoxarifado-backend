@@ -71,7 +71,7 @@ namespace AlmoxarifadoAPI.Controllers {
         }
 
         [HttpPut("{itemNota}")]
-        public IActionResult AtualizarItemNota(int itemNota, [FromBody] ItensNotaPutDTO novoItem) 
+        public IActionResult AtualizarItemNota(int itemNota, ItensNotaPutDTO novoItem) 
         {
             try {
                 var itemNotaAtualizado = _itensNotaService.AtualizarItemNota(itemNota, novoItem);
