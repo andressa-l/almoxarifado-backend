@@ -9,13 +9,13 @@ namespace AlmoxarifadoInfrastructure.Data.Interfaces {
     public interface IProdutoRepository {
 
         Task<IEnumerable<Produto>> GetAll();
-        Task<Produto> GetById(int id);
+        Produto ObterProdutoPorId(int id);
 
-        Task<Produto> Create(Produto produto);
+        Task<Produto> CriarProduto(Produto produto);
 
-        Task<Produto> Update(Produto produto);
+        Task<Produto> AtualizarProduto(Produto produto);
 
-        Task<Produto> Delete(int id);
+        Task<Produto> DeletarProduto(int id);
 
 
     }

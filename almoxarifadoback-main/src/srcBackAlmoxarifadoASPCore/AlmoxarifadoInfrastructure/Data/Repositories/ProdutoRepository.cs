@@ -7,41 +7,45 @@ using System.Threading.Tasks;
 
 namespace AlmoxarifadoInfrastructure.Data.Repositories {
     public class ProdutoRepository : IProdutoRepository {
-        private readonly xAlmoxarifadoContext _xAlmoxarifadoContext;
+        private readonly xAlmoxarifadoContext _context;
 
         public ProdutoRepository(xAlmoxarifadoContext context) {
-            _xAlmoxarifadoContext = context;
+            _context = context;
         }
 
-        public async Task<Produto> Create(Produto produto) {
-            _xAlmoxarifadoContext.Produtos.Add(produto);
-            await _xAlmoxarifadoContext.SaveChangesAsync();
+        public async Task<IEnumerable<Produto>> GetAll() {
+            return await _context.Produtos.ToListAsync();
+        }
+
+        public Produto ObterProdutoPorId(int id) 
+        {
+            return _context.Produtos.FirstOrDefault(p => p.IdPro == id);
+        }
+
+        public async Task<Produto> CriarProduto(Produto produto) {
+            _context.Produtos.Add(produto);
+            await _context.SaveChangesAsync();
             return produto;
         }
 
-        public async Task<Produto> Delete(int id) {
-            var produto = await _xAlmoxarifadoContext.Produtos.FindAsync(id);
+        public async Task<Produto> DeletarProduto(int id) {
+            var produto = await _context.Produtos.FindAsync(id);
             if (produto == null) {
                 return null;
             }
 
-            _xAlmoxarifadoContext.Produtos.Remove(produto);
-            await _xAlmoxarifadoContext.SaveChangesAsync();
+            _context.Produtos.Remove(produto);
+            await _context.SaveChangesAsync();
             return produto;
         }
 
-        public async Task<IEnumerable<Produto>> GetAll() {
-            return await _xAlmoxarifadoContext.Produtos.ToListAsync();
-        }
 
-        public async Task<Produto> GetById(int id) {
-            return await _xAlmoxarifadoContext.Produtos.FindAsync(id);
-        }
 
-        public async Task<Produto> Update(Produto produto) {
-            _xAlmoxarifadoContext.Entry(produto).State = EntityState.Modified;
+
+        public async Task<Produto> AtualizarProduto(Produto produto) {
+            _context.Entry(produto).State = EntityState.Modified;
             try {
-                await _xAlmoxarifadoContext.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException) {
                 if (!ProdutoExists(produto.IdPro)) {
@@ -55,7 +59,7 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories {
         }
 
         private bool ProdutoExists(int id) {
-            return _xAlmoxarifadoContext.Produtos.Any(e => e.IdPro == id);
+            return _context.Produtos.Any(e => e.IdPro == id);
         }
     }
 }

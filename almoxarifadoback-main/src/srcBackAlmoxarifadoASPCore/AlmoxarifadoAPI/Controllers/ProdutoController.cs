@@ -38,8 +38,8 @@ namespace AlmoxarifadoAPI.Controllers {
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id) {
-            var produto = await _produtoService.GetById(id);
+        public IActionResult GetById(int id) {
+            var produto = _produtoService.GetById(id);
             if (produto == null) {
                 return NotFound("Produto não encontrado.");
             }

@@ -23,12 +23,12 @@ namespace AlmoxarifadoServices {
 
         public async Task<ProdutoGetDTO> Create(ProdutoPostDTO produtoDTO) {
             var produto = _mapper.Map<Produto>(produtoDTO);
-            var createdProduto = await _produtoRepository.Create(produto);
+            var createdProduto = await _produtoRepository.CriarProduto(produto);
             return _mapper.Map<ProdutoGetDTO>(createdProduto);
         }
 
         public async Task<ProdutoGetDTO> Delete(int id) {
-            var deletedProduto = await _produtoRepository.Delete(id);
+            var deletedProduto = await _produtoRepository.DeletarProduto(id);
             return _mapper.Map<ProdutoGetDTO>(deletedProduto);
         }
 
@@ -37,15 +37,15 @@ namespace AlmoxarifadoServices {
             return _mapper.Map<IEnumerable<ProdutoGetDTO>>(produtos);
         }
 
-        public async Task<ProdutoGetDTO> GetById(int id) {
-            var produto = await _produtoRepository.GetById(id);
+        public ProdutoGetDTO GetById(int id) {
+            var produto = _produtoRepository.ObterProdutoPorId(id);
             return _mapper.Map<ProdutoGetDTO>(produto);
         }
 
         public async Task<ProdutoGetDTO> Update(int id, ProdutoPostDTO produtoDTO) {
             var produto = _mapper.Map<Produto>(produtoDTO);
             produto.IdPro = id;
-            var updatedProduto = await _produtoRepository.Update(produto);
+            var updatedProduto = await _produtoRepository.AtualizarProduto(produto);
             return _mapper.Map<ProdutoGetDTO>(updatedProduto);
         }
     }
