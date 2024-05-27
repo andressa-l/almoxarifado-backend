@@ -9,8 +9,10 @@ namespace AlmoxarifadoAPI.Controllers {
     public class ItensNotaController : ControllerBase {
 
         private readonly ItensNotaService _itensNotaService;
-        public ItensNotaController(ItensNotaService itensNotaService) {
+        private readonly EstoqueService _estoqueService;
+        public ItensNotaController(ItensNotaService itensNotaService, EstoqueService estoqueService) {
             _itensNotaService = itensNotaService;
+            _estoqueService = estoqueService;
         }
 
         [HttpGet]
@@ -49,6 +51,17 @@ namespace AlmoxarifadoAPI.Controllers {
             try 
             {
                 var itemNotaSalvo = _itensNotaService.CriarItemNota(itemNota);
+                _estoqueService.AtualizarEstoqueAoEntrarNotaFiscal(new ItensNota 
+                {
+                    ItemNum = itemNotaSalvo.ItemNum,
+                    IdPro = itemNotaSalvo.IdPro,
+                    IdNota = itemNotaSalvo.IdNota,
+                    IdSec = itemNotaSalvo.IdSec,
+                    QtdPro = itemNotaSalvo.QtdPro,
+                    PreUnit = itemNotaSalvo.PreUnit,
+                    TotalItem = itemNotaSalvo.TotalItem,
+                    EstLin = itemNotaSalvo.EstLin
+                });
                 return Ok(itemNotaSalvo);
             }
             catch (Exception) 
@@ -56,8 +69,6 @@ namespace AlmoxarifadoAPI.Controllers {
                 return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
             }
         }
-
-
 
         [HttpPut("{itemNota}")]
         public IActionResult AtualizarItemNota(int itemNota, [FromBody] ItensNotaPutDTO novoItem) 
@@ -67,6 +78,16 @@ namespace AlmoxarifadoAPI.Controllers {
                 if (itemNotaAtualizado == null) {
                     return StatusCode(404, "Nenhum item encontrado com este ID");
                 }
+                _estoqueService.AtualizarEstoqueAoEntrarNotaFiscal(new ItensNota {
+                    ItemNum = itemNotaAtualizado.ItemNum,
+                    IdPro = itemNotaAtualizado.IdPro,
+                    IdNota = itemNotaAtualizado.IdNota,
+                    IdSec = itemNotaAtualizado.IdSec,
+                    QtdPro = itemNotaAtualizado.QtdPro,
+                    PreUnit = itemNotaAtualizado.PreUnit,
+                    TotalItem = itemNotaAtualizado.TotalItem,
+                    EstLin = itemNotaAtualizado.EstLin
+                });
                 return Ok(itemNotaAtualizado);
             }
             catch (Exception) 

@@ -15,15 +15,14 @@ builder.Services.AddScoped<ItensNotaService>();
 builder.Services.AddScoped<ProdutoService>();
 builder.Services.AddScoped<RequisicaoService>();
 builder.Services.AddScoped<ItensReqService>();
-
+builder.Services.AddScoped<EstoqueService>();
 
 builder.Services.AddScoped<INotaFiscalRepository, NotaFiscalRepository>();
 builder.Services.AddScoped<IItensNotaRepository, ItensNotaRepository>();
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IRequisicaoRepository, RequisicaoRepository>();
 builder.Services.AddScoped<IItensReqRepository, ItensReqRepository>();
-
-
+builder.Services.AddScoped<IEstoqueRepository, EstoqueRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

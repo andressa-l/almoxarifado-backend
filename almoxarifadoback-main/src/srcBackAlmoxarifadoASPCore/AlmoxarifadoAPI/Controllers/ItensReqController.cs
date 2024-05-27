@@ -1,4 +1,5 @@
-﻿using AlmoxarifadoServices;
+﻿using AlmoxarifadoDomain.Models;
+using AlmoxarifadoServices;
 using AlmoxarifadoServices.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,8 +11,10 @@ namespace AlmoxarifadoAPI.Controllers {
     public class ItensReqController : ControllerBase 
     {
         private readonly ItensReqService _itensReqService;
-        public ItensReqController(ItensReqService itensReqService) {
+        private readonly EstoqueService _estoqueService;
+        public ItensReqController(ItensReqService itensReqService, EstoqueService estoqueService) {
             _itensReqService = itensReqService;
+            _estoqueService = estoqueService;
         }
 
         [HttpGet]
@@ -45,11 +48,21 @@ namespace AlmoxarifadoAPI.Controllers {
         }
 
         [HttpPost]
-        public IActionResult Create(ItensReqPostDTO itensReqPostDTO) 
+        public IActionResult Create(ItensReqPostDTO itensReq) 
         {
             try {
-                var itensReq = _itensReqService.CriarItemRequisicao(itensReqPostDTO);
-                return CreatedAtAction(nameof(GetById), new { numItem = itensReq.NumItem }, itensReq);
+                var itemReqSalvo = _itensReqService.CriarItemRequisicao(itensReq);
+                _estoqueService.AtualizarEstoqueAoSairRequisicao(new ItensReq {
+                    NumItem = itemReqSalvo.NumItem,
+                    IdPro = itemReqSalvo.IdPro,
+                    IdReq = itemReqSalvo.IdReq,
+                    IdSec = itemReqSalvo.IdSec,
+                    QtdPro = itemReqSalvo.QtdPro,
+                    PreUnit = itemReqSalvo.PreUnit,
+                    TotalItem = itemReqSalvo.TotalItem,
+                    TotalReal = itemReqSalvo.TotalReal
+                });
+                return CreatedAtAction(nameof(GetById), new { numItem = itemReqSalvo.NumItem }, itemReqSalvo);
             }
             catch (Exception) 
             {
