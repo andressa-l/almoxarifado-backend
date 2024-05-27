@@ -37,10 +37,10 @@ namespace AlmoxarifadoAPI.Controllers {
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] RequisicaoPostDTO requisicaoPostDTO) {
+        public async Task<IActionResult> Update(int id, [FromBody] RequisicaoPutDTO requisicaoPostDTO) {
       
 
-            var requisicao = await _requisicaoService.Update(requisicaoPostDTO);
+            var requisicao = await _requisicaoService.Update(id, requisicaoPostDTO);
             return Ok(requisicao);
         }
 
